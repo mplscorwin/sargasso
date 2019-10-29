@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Sargasso - MP3 Editor</title>
+    <script src="jquery-3.4.1.min.js"></script>
+
+    <!-- wavesurfer -->
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <!-- plugins -->
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.regions.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.minimap.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.timeline.js"></script>
+
+    <script src="spectrum.js"></script>
+    <link rel="stylesheet" href="spectrum.css" />
+    <script src="mp3.js"></script>
+    <link rel="stylesheet" href="mp3.css" />
+  </head>
+  <body>
+    <form name="propertiesForm" id="propertiesForm">
+      <div id="headerDiv" name="headerDiv" class="header">
+	<img src="/wp-content/uploads/2019/07/cropped-shadowfedora.jpg" alt="Project_Header_Image" />
+	<h3 class="titleColor">Sargasso - MP3 Editor <span id="editorPath" /></h3>
+      </div>
+      <input type="hidden" id="path" name="path" />
+      <div class="listFrame" id="listFrameDiv">
+	<table id="listTable">
+	  <thead>
+	    <tr><td><a href="javascript://">&oplus;</a></td><td>Artist</td><td>Album</td><td>Title</td><td>Duration</td></tr>
+	  </thead>
+	  <tbody id="listTableBody">
+	    
+	  </tbody>
+	</table>
+      </div>
+      <div class="outterFrame" id="outterFrameDiv" style="display:none">
+	<div class="innerFrame" id="innerFrameDiv">
+	  <div class="playerFrame" id="playerFrameDiv">
+	    <div class="progress progress-striped active" id="progress-bar">
+              <div class="progress-bar progress-bar-info"></div>
+            </div>
+	  </div>
+	  <div class="wave-timeline" id="playerTimelineDiv"></div>
+	  <div class="col-sm-3">
+            <input id="slider" data-action="zoom"
+		   type="range" min="1" max="200" value="0" style="width: 100%" />
+          </div>
+
+	  <table id="propertiesTable">
+	    <tr>
+	      <td colspan="3">
+		<table id="transportControls" width="100%">
+		  <tr>
+		    <td width="175">
+		      <input type="button" value="<<" name="rewind" id="rewind" />
+		      <input type="button" value="<" name="back" id="back" />
+		      <input type="button" value="|| >" name="play" id="play" />
+		      <!-- <input type="button" value="||" name="pause" id="pause" /> -->
+		      <input type="button" value=">" name="forward" id="forward" />
+		      <input type="button" value=">>" name="gotoend" id="gotoend" />
+		    </td>
+		    <td id="playheadPositionCell"><span id="playheadPosition" name="playheadPosition">??</span></td>
+		  </tr>
+		  </table>
+	      </td>
+	      <td rowspan="5" class="markerCell">
+		<div id="markerEditorDiv">
+		  <table id="markerEditorTable">
+		    <tr>
+		      <td>Region Label</td>
+		      <td><input type="text" name="markerTitle" id="markerTitle" /></td>
+		      <td><input type="color" class="picker" name="showPallete" id="showPallete" /></td>
+		    </tr>
+		    <tr>
+		      <td>Start <input type="text" size="4" name="markerStartInt" id="markerStartInt" /></td>
+		      <td colspan="2">
+			<input type="range" style="width: 100%" min="1" max="200" value="0" name="markerStart" id="markerStart" />
+		      </td>
+		    </tr>
+		    <tr>
+		      <td>End <input type="text" size="4" name="markerEndInt" id="markerEndInt" /></td>
+		      <td colspan="2">
+			<input type="range" style="width: 100%"  min="1" max="200" value="0" name="markerEnd" id="markerEnd" />
+		      </td>
+		    </tr>
+		    <tr>
+		      <td>Annotation/Notes</td>
+		      <td colspan="2"><textarea name="markerNotes" id="markerNotes" style="width:100%"></textarea></td>
+		    </tr>
+		    <tr>
+		      <td colspan="3">
+			<span id="markerEditorControls">
+			  <input type="button" name="loopMarker" id="loopMarker" value="Loop Region"/>
+			  <input type="button" name="removeMarker" id="removeMarker" value="Remove Region"/>
+			  <input type="button" name="exportMarker" id="exportMarker" value="Export"/>
+			  <input type="button" name="saveMarker" id="saveMarker" value="Save"/>
+			</span>
+		      </td>
+		    </tr>
+		  </table>
+		</div>
+		<div id="markerListDiv" />
+	      </td>
+	    </tr>
+	    <tr><td>Artist</td><td colspan="2"><input type="text" name="artist" id="artist" /></td></tr>
+	    <tr><td>Album</td><td colspan="2"><input type="text" name="album" id="album" /></td></tr>
+	    <tr><td>Title</td><td colspan="2"><input type="text" name="title" id="title" /></td></tr>
+	    <tr>
+	      <td>Duration</td>
+	      <td><input type="text" name="dttm" id="dttm" disabled="true" size="6" /></td>
+	      <td>
+		<input type="button" value="Update" name="saveTags" id="saveTags" />
+		<input type="button" value="Close" name="CloseTrack" id="closeTrack" />
+	      </td>
+	    </tr>
+	  </table>
+	</div>
+      </div>
+    </form>
+  </body>
+</html>

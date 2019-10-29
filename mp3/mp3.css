@@ -1,0 +1,114 @@
+body, td, th {
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 14px;
+  color: #FFF;
+}
+.titleColor {
+ color: #DA9F28;
+}
+.titleColor:hover {
+  color: #19617e;
+    background-color: #DA9F28;
+}
+body h2, h3 {
+  margin-left: 1em;
+  margin-right: 1em;
+  background: #000;
+}
+form {
+ display:block
+}
+body p, div, li, h2, h3, dt, dd, form {
+  margin-left: 3em;
+  margin-right: 3em;
+  border-bottom-color: #FFF;
+  border-bottom: #CCC;
+  background: #000;
+}
+dt { margin-top: 1em; }
+#outterFrameDiv {
+background: #000;
+}
+#innerFrameDiv {
+ display: block;
+text-align: left;
+font-size: 16px;
+font-family: Arial, Helvetica, sans-serif;
+position: relative;
+margin-left: auto;
+margin-right: auto;
+width: 80%;
+text-align: left;
+border: none;
+padding-left: .5em;
+padding-right: .5em;
+}
+#innerFrameDiv #outterFrameDiv h3 {
+font-size: 18px;
+}
+#outterFrameDiv p #The_Plan {
+font-size: 18px;
+}
+#outterFrameDiv h3 {
+  font-size: 18px;
+}
+.right {
+ float: right;
+}
+.left {
+ float: left;
+}
+.mergin-right {
+  margin-right: .3em;
+}
+.mergin-left {
+ margin: 1em;
+}
+table td {
+  margin-right: 5em;
+  margin-left: 5em;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+ border: none;
+}
+ a:link {
+  color: #19617E;
+    text-decoration: none;
+}
+ a:visited {
+    text-decoration: none;
+  color: #E2A125;
+}
+ a:hover {
+    text-decoration: underline;
+  color: #E4A024;
+}
+ a:active {
+    text-decoration: none;
+  color: #19617E;
+}
+#footer {
+ color: #999;
+}
+
+#playheadPosition {
+    width: 100%; 
+    overflow: hidden;
+    display: inline-block;
+    text-align: right;
+}
+
+#playheadPositionCell {
+    border: 1px solid white;
+}
+
+.listFrame {
+    position: absolute;
+    top: 268;    
+}
+#listTableBody > tr:hover {
+    background: #04CDD5;
+}
+#listTableBody > tr:hover > td {
+    color: black;
+}
