@@ -1,3 +1,4 @@
+/// mp3.js -- web behaviours for sargasso mp3 editor -*- mode:js2 -*-
 ;$( document ).ready(function() {
     var cache = { tracks: [], markers: {} };
 
@@ -14,7 +15,7 @@
 	}
 	throw new Error('Bad Hex');
     }
-    
+
     var lastClickedRegion;
 
     //var path;// = '/corwin-phone-audio/sargasso-july-2018.mp3';
@@ -75,29 +76,9 @@
 		//console.log(val);
 		wavesurfer.zoom(val);
     });
-
-
-    // using native color picker + hard-coded alpha for now
-    /*$("#showPallete").spectrum({
-	showPalette: true,
-	showAlpha: true,
-	hideAfterPaletteSelect:true,
-	showInput: true,
-	color: "yellow",
-	showInitial: true,
-	change:function(color) {
-	    lastClickedRegion.color = hexToRgbA( color.toString());
-	    lastClickedRegion.updateRender();
-	},
-	palette: [
-	    ['black', 'white', 'blanchedalmond'],
-	    ['rgb(255, 128, 0);', 'hsv 100 70 50' , 'lightyellow']
-	]
-	});*/
     // color picker change event
     $("#showPallete").on('change',function(target) {
 	lastClickedRegion.data.color = $( this ).val();
-	//lastClickedRegion.color = hexToRgbA( lastClickedRegion.data.color );
 	lastClickedRegion.update({color: hexToRgbA( lastClickedRegion.data.color )});
     });
 
@@ -107,8 +88,10 @@
 	    if( cache.tracks[ i ].path == path )
 		return cache.tracks[ i];
 	}
+	return undefined;
     }
 
+    // region selection
     function RegionSelectedHandler(region) {
 	lastClickedRegion = region;
 	console.log(region);
@@ -123,9 +106,7 @@
 	$('#markerEnd,#markerEndInt').val( end.text);
     }
     wavesurfer.on('region-click', RegionSelectedHandler);
-    
     $('#loopMarker').click(function() {	lastClickedRegion.playLoop();   });
-    
     wavesurfer.on('region-created',function(region) {
 	if(! (region.data && region.data.title && region.data.title.length > 0)) {
 	    // freshly drawn region
@@ -136,7 +117,6 @@
     });
 
     function SecondsToHMS(seconds) { //https://stackoverflow.com/questions/1322732/convert-seconds-to-hh-mm-ss-with-javascript
-	//return (new Date).clearTime().addSeconds(seconds).toString('H:mm:ss'); }
 	return new Date(seconds * 1000).toISOString().substr(11, 8); }
     function HMSToSeconds(str) { //https://stackoverflow.com/questions/9640266/convert-hhmmss-string-to-seconds-only-in-javascript
 	var p = str.split(':'),
@@ -180,10 +160,10 @@
 	lastClickedRegion.update({end:val.number});
     }
 
-    $('#markerStart').on('input',function(){ OnMarkerStartChange( $(this).val())});
+    $('#markerStart').on('input',function(){ OnMarkerStartChange( $(this).val());});
     $('#markerEnd').on('input',function(){ OnMarkerEndChange( $(this).val())});
-    $('#markerStartInt').on('input',function(){ OnMarkerStartChange( $(this).val())});
-    $('#markerEndInt').on('input',function(){ OnMarkerEndChange( $(this).val())});
+    $('#markerStartInt').on('input',function(){ OnMarkerStartChange( $(this).val());});
+    $('#markerEndInt').on('input',function(){ OnMarkerEndChange( $(this).val());});
 
     wavesurfer.on('region-updated',function(region) {
 	var start = ParseDuration(region.start);
@@ -197,7 +177,7 @@
 
     $("#markerTitle").change(function() { lastClickedRegion.data.title = $(this).val(); });
     $("#markerNotes").change(function() { lastClickedRegion.data.notes = $(this).val(); });
-    
+
     function PathSelectedHandler(path) {
 	ShowEditor();
 	$("#editorPath").html("<a id=\"directLink\" href=\"" + path + "\">" + path + "</a>");
@@ -212,7 +192,7 @@
 	$('#dttm').val( track.dttm );
 
 	// set valid values for region editor size and position sliders
-	$('#markerStart,#markerEnd').prop('max',track.secs)
+	$('#markerStart,#markerEnd').prop('max',track.secs);
 
 	// fetch markers
 	$.ajax({dataType:"json",url:'/mp3/api/get-markers.pl',data:{path:path},
@@ -229,27 +209,10 @@
 		error:function(e,eStr) {
 		    console.log(e,eStr);
 		}});
-	/*$.getJSON('/mp3/api/get-tags.pl',{path:path}, function(data) {
-	    console.log( data );
-	    var regions = cache.markers[ path ] = data;
-	    //console.log(regions);
-	    for(var i=0; i<regions.length; ++i) {
-		var d = regions[i];
-		var r = { start:d.start, end:d.end, color:hexToRgbA( d.color), data:d };
-		wavesurfer.addRegion( r);
-	    }
-	});*/
-	
+
 	wavesurfer.on('ready', function(e) {
 	    $('#playheadPosition').text( "0");
-	    // TODO: load regions into cache from API
-	    /*var regions = cache.markers[ path ];
-	    //console.log(regions);
-	    for(var i=0; i<regions.length; ++i) {
-		var d = regions[i];
-		var r = { start:d.start, end:d.end, color:hexToRgbA( d.color), data:d };
-		wavesurfer.addRegion( r);
-	    }*/
+
 	    // transport controls
 	    $('#rewind').click(function() { wavesurfer.seekTo( 0);   });
 	    $('#back').click(function() { wavesurfer.skipBackward();   });
@@ -267,7 +230,7 @@
     // collect all regions into JSON for persistance API
     function SerializeRegions() {
 	var json = [];
-	var list = wavesurfer.regions.list
+	var list = wavesurfer.regions.list;
 	//console.log( list);
 	Object.keys(list).forEach(id => {
             var region = list[id];
@@ -307,7 +270,6 @@
 	OnExportMarker();
     });
 
-    
     function OnSaveMarker() {
 	console.log('save marker handler');
 	var json = SerializeRegions();
@@ -336,7 +298,7 @@
 	var data = {path:$("#editorPath").text()};
 	["artist","album","title"].forEach(function(elem,ix) {
 	    data[ elem ] = $("#" + elem).val();
-	})
+	});
 	console.log(url,data);
 	$.ajax({url:url,
 		data:data,
@@ -354,7 +316,7 @@
 	    $idown = $('<iframe>', { id:'idown', src:url }).hide().appendTo('body');
 	}
     }
-    
+
     function OnTrackData(data) {
 	cache.tracks = data;
 	var $list = $("#listTableBody");
@@ -387,11 +349,11 @@
 	    $list.append( $html );
 	}
     }
-    
+
     function LoadTracks() {
 	$.ajax({url:"/mp3/api/get.pl",
 		success:OnTrackData,
-		error:function(err,eStr){ console.log("load tracks failed",eStr,err);}})}
+		error:function(err,eStr){ console.log("load tracks failed",eStr,err);}});}
     LoadTracks();
     ShowList();
 
@@ -408,5 +370,26 @@
 	ShowList();
     });
 
-    
-})
+    // sorting
+    $('th').click(function(){
+	var table = $(this).parents('table').eq(0);
+	var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+	this.asc = !this.asc;
+	if (!this.asc) {
+	    rows = rows.reverse();
+	}
+	for (var i = 0; i < rows.length; i++) {
+	    table.append(rows[i]);
+	}
+    });
+    function comparer(index) {
+	return function(a, b) {
+            var valA = getCellValue(a, index),
+		valB = getCellValue(b, index);
+            return $.isNumeric(valA) && $.isNumeric(valB)
+		? valA - valB
+		: valA.toString().localeCompare(valB);
+	};
+    }
+    function getCellValue(row, index){ return $(row).children('td').eq(index).text(); }
+}); // end wrap
