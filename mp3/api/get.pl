@@ -34,8 +34,12 @@ sub wanted {
     my $artist = $info->artist || '<unlabled>';
     my $album = $info->album || '<unlabled>';
     my $title = $info->title || '<unlabled>';
+    my @stat = stat($file) ; #]->[8-10];
+    my ($atime,$mtime,$ctime) = map { scalar( localtime( $_))} @stat[8,9,10];
+    #my ($atime,$mtime,$ctime) = map { scalar(localtime($_)) } [ stat($file) ]->[8-10];
+
     print ',' unless $first-- > 0;
-    print qq<{"artist":"$artist","album":"$album","title":"$title","dttm":"$min:$secs","secs":$total_secs,"path":"$path"}>;
+    print qq<{"artist":"$artist","album":"$album","title":"$title","dttm":"$min:$secs","secs":$total_secs,"path":"$path","ctime":"$ctime","mtime":"$mtime","atime":"$atime"}>;
   }
 }
 

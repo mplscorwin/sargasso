@@ -13,7 +13,7 @@ my @auth_settings;
 tie @auth_settings, 'Tie::File', $auth_settings_filename
   or die qq(cannot load auth settings);
 
-my($key,$secret,$token) = map { chomp; $_ } @auth_settings;
+my($key,$secret,$token,$cursor) = map { chomp; $_ } @auth_settings;
 
 die qq(key and secret must be the first two lines of $auth_settings_filename)
   unless $key and $secret;

@@ -368,6 +368,9 @@
 			"</td><td>" + d.album  +
 			"</td><td>" + d.title  +
 			"</td><td>" + d.dttm  +
+			"</td><td>" + d.ctime  +
+			"</td><td>" + d.mtime  +
+			"</td><td>" + d.atime  +
 			"</td></tr>" );
 	    var $html = $( html );
 	    $html.hover(function(){ $("#editorPath").html($(this).data('path')); },

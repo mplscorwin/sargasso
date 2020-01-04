@@ -38,5 +38,5 @@ inc/
 *~
 
 # dropbox credentials
-.dropbox-auth
+.dropbox-auth*
 

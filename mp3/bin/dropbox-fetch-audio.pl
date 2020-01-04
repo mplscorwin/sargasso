@@ -9,6 +9,8 @@ use IO::File;
 
 use WebService::Dropbox;
 
+use Time::Piece;
+
 my $root_local_path = q(/home/sargasso/sargassoband.com);
 my $local_bin_path = $root_local_path . q(/mp3/bin);
 my $auth_settings_filename = $local_bin_path . q(/.dropbox-auth);
@@ -35,12 +37,12 @@ sub fetch ($;$) {
 
 sub with_folder_entries(&$$) {
   my( $worker, $box, $result) = @_;
-
-  $worker->($_) for @$$result{entries};
+  #use Data::Dumper; warn Dumper( $result );
+  $worker->($_) for @{$result->{entries}};
 
   if ($$result{has_more}) {
     $cursor = $auth_settings[3] = $result->{cursor} || return;
-    &with_folder_entries( $worker, $box, $new_result = fetch( $box, $cursor));
+    &with_folder_entries( $worker, $box, my$new_result = fetch( $box, $cursor));
   }
 }
 
@@ -72,6 +74,17 @@ with_folder_entries {
   } elsif ('file' eq $item->{'.tag'}||'') {
     my $fh = IO::File->new( $file_path, '>');
     $box->download($$item{id}, $fh);
+    #$fh->close();
+    undef $fh;
+    eval {
+      my $mtime = Time::Piece->strptime( $$item{client_modified},'%Y-%m-%dT%H:%M:%SZ');
+      my $atime = Time::Piece->strptime( $$item{server_modified},'%Y-%m-%dT%H:%M:%SZ');
+      unless (1 == utime( $atime->epoch, $mtime->epoch, $file_path )) {
+	warn qq[ERROR: [$file_path] failed to set a/m times [$atime,$mtime]];
+      }
+      my $older = $mtime > $atime ? $atime : $mtime;
+      system(qq(touch -d "$older" '$file_path'));
+    };
     $count += 1;
     print scalar(localtime(time))." Wrote $file_path\n";
   }
